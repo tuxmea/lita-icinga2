@@ -199,6 +199,6 @@ module Lita
       end
     end
 
-    Lita.register_handler(Icinga)
+    Lita.register_handler(self)
   end
 end
