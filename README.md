@@ -1,0 +1,76 @@
+# lita-icinga2
+
+[![Build Status](https://travis-ci.org/tuxmea/lita-icinga2.png?branch=master)](https://travis-ci.org/tuxmea/lita-icinga2)
+[![Coverage Status](https://coveralls.io/repos/tuxmea/lita-icinga2/badge.png)](https://coveralls.io/r/tuxmea/lita-icinga2)
+
+**lita-icinga2** is a handler for [Lita](https://github.com/jimmycuadra/lita) that allows interaction with Icinga monitoring solution.
+It listens for notifications on a HTTP endpoint.
+
+Work is based upon [lita-nagios](https://github.com/josqu4red/lita-nagios) handler.
+
+Note: Colors in notifications are not enabled yet, because it relies completely on the adapter and no abstraction layer is implemented nor designed as of now.
+
+## Installation
+
+Add lita-icinga2 to your Lita instance's Gemfile:
+
+``` ruby
+gem "lita-icinga2"
+```
+
+## Configuration
+
+### HTTP interface
+* `default_room` (String) - Default chat room for notifications
+
+### Icinga commands
+* `api` - Icinga API URL
+* `user` - Icinga user with system commands authorization
+* `pass` - User password
+* `verify_ssl` - default: `true`
+
+### Example
+
+``` ruby
+Lita.configure do |config|
+  config.handlers.icinga2.default_room = "#admin_room"
+  config.handlers.icinga2.api = "http://icinga.example.com:5665/v1"
+  config.handlers.icinga2.user = "lita"
+  config.handlers.icinga2.pass = "xxxx"
+  config.handlers.icinga2.verify_ssl = true
+end
+```
+
+## Usage
+
+### Display notifications in channel
+
+lita-icinga provides a HTTP endpoint to receive Icinga notifications:
+
+```
+POST /v1/events
+```
+Request parameters must include those fields:
+* `type` - `host` or `service`
+* `room` - notifications destination (see `default_room` in configuration section)
+* `host` - Icinga' $HOSTNAME$ or $HOSTALIAS$
+* `output` - Icinga' $HOSTOUTPUT$ or $SERVICEOUTPUT$
+* `state` - Icinga' $HOSTSTATE$ or $SERVICESTATE$
+* `notificationtype` - Icinga' $NOTIFICATIONTYPE$
+* `description` - Icinga' $SERVICEDESC$ (only for `service` type)
+
+
+### Send commands to Icinga
+
+```
+lita: icinga recheck <-h | --host HOST> [-s | --service SERVICE] - Reschedule check for given host/service
+lita: icinga ack(nowledge) <-h | --host HOST> [-s | --service SERVICE] [-m | --message MESSAGE] - Acknowledge host/service problem with optional message
+```
+
+### ToDo
+
+```
+lita: icinga enable notif(ication(s)) <-h | --host HOST> [-s | --service SERVICE] - Enable notifications for given host/service
+lita: icinga disable notif(ication(s)) <-h | --host HOST> [-s | --service SERVICE] - Disable notifications for given host/service
+lita: icinga (fixed|flexible) downtime <-d | --duration DURATION > <-h | --host HOST> [-s | --service SERVICE] - Schedule downtime for a host/service with duration units in (m, h, d, default to seconds)
+```
