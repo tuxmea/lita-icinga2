@@ -72,7 +72,7 @@ module Lita
         response.reply(reply)
       end
 
-      route /^cinga\s+ack(nowledge)?/, :acknowledge,
+      route /^icinga\s+ack(nowledge)?/, :acknowledge,
         command: true,
         kwargs: {
           host: { short: "h" },
