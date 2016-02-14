@@ -31,7 +31,7 @@ gem "lita-icinga2"
 ``` ruby
 Lita.configure do |config|
   config.handlers.icinga2.default_room = "#admin_room"
-  config.handlers.icinga2.api = "http://icinga.example.com:5665/v1"
+  config.handlers.icinga2.api = "http://icinga.example.com:5665"
   config.handlers.icinga2.user = "lita"
   config.handlers.icinga2.pass = "xxxx"
   config.handlers.icinga2.verify_ssl = true
