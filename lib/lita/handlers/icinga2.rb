@@ -116,6 +116,33 @@ module Lita
         response.reply(reply)
       end
 
+      route /^icinga\s+unack(nowledge)?/, :unacknowledge,
+        command: true,
+        kwargs: {
+          host: { short: "h" },
+          service: { short: "s" }
+        },
+        help: {
+          "icinga unack(nowledge) <-h | --host HOST> <-s | --service SERVICE>" => "Remove Acknowledge host/service problem",
+        }
+
+      def unacknowledge(response)
+        args = response.extensions[:kwargs]
+        return response.reply("Missing 'host' argument") unless args[:host]
+        return response.reply("Missing 'service' argument") unless args[:service]
+
+        payload_w_params = { 
+          "type" => "Service", 
+          "filter" => "service.name==\"#{args[:service]}\" && host.name==\"#{args[:host]}\"", 
+        }
+        reply = "#{args[:service]} on #{args[:host]}"
+
+        reply = @site["/v1/actions/acknowledge-problem"].post payload_w_params.to_json { |response, request, result, &block|
+          response.return!(result)
+        }
+        response.reply(reply)
+      end
+
 #      route /^icinga(\s+(?<type>fixed|flexible))?\s+downtime/, :schedule_downtime,
 #        command: true,
 #        kwargs: {
