@@ -1,8 +1,5 @@
 # lita-icinga2
 
-[![Build Status](https://travis-ci.org/tuxmea/lita-icinga2.png?branch=master)](https://travis-ci.org/tuxmea/lita-icinga2)
-[![Coverage Status](https://coveralls.io/repos/tuxmea/lita-icinga2/badge.png)](https://coveralls.io/r/tuxmea/lita-icinga2)
-
 **lita-icinga2** is a handler for [Lita](https://github.com/jimmycuadra/lita) that allows interaction with Icinga monitoring solution.
 It listens for notifications on a HTTP endpoint.
 
