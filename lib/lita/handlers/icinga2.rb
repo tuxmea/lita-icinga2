@@ -160,7 +160,7 @@ module Lita
       # HTTP endpoints
       ##
 
-      api.post "/v1/events?types=StateChange&types=Notification&queue=icinga", :receive
+      http.post "/v1/events?types=StateChange&types=Notification&queue=icinga", :receive
 
       def receive(request, response)
         params = request.params
@@ -197,8 +197,8 @@ module Lita
       rescue Exception => e
         Lita.logger.error(e)
       end
+      Lita.register_handler(self)
     end
 
-    Lita.register_handler(self)
   end
 end
