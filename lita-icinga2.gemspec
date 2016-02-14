@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name          = "lita-icinga2"
-  spec.version       = "0.0.1"
+  spec.version       = "0.0.2"
   spec.authors       = ["Martin Alfke"]
   spec.email         = ["tuxmea@gmail.com"]
   spec.description   = "Icinga 2 interaction with Lita"
@@ -16,6 +16,7 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency "lita", "~> 4.0"
   spec.add_runtime_dependency "lita-keyword-arguments"
+  spec.add_runtime_dependency "rest-client"
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake", "~> 0"
