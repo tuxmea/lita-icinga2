@@ -188,7 +188,7 @@ module Lita
       # HTTP endpoints
       ##
 
-      http.post "/v1/events?types=StateChange&types=Notification&queue=icinga", :receive
+      http.post "/nagios/notification", :receive
 
       def receive(request, response)
         params = request.params
