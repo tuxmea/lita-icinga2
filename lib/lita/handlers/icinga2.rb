@@ -38,7 +38,6 @@ module Lita
 
       route /^icinga\s+recheck/, :recheck,
         command: true,
-        restrict_to: ["admins"],
         kwargs: {
           host: { short: "h" },
           service: { short: "s" }
@@ -73,7 +72,6 @@ module Lita
 
       route /^cinga\s+ack(nowledge)?/, :acknowledge,
         command: true,
-        restrict_to: ["admins"],
         kwargs: {
           host: { short: "h" },
           service: { short: "s" },
@@ -116,7 +114,6 @@ module Lita
 
       route /^icinga(\s+(?<type>fixed|flexible))?\s+downtime/, :schedule_downtime,
         command: true,
-        restrict_to: ["admins"],
         kwargs: {
           host: { short: "h" },
           service: { short: "s" },
