@@ -12,7 +12,6 @@ module Lita
         headers = {
           "Accept" => "application/json",
           "Content" => "application/json",
-          "X-HTTP-Method-Override" => "GET"
         }
         if robot.config.handlers.icinga2.verify_ssl == true
           ssl_ca_file = "pki/icinga2-ca.crt"
@@ -27,7 +26,8 @@ module Lita
           :user => robot.config.handlers.icinga2.user,
           :password => robot.config.handlers.icinga2.pass,
           :ssl_ca_file => ssl_ca_file,
-          :verify_ssl => verify_ssl
+          :verify_ssl => verify_ssl,
+          :accept => :json
         )
         super(robot)
       end
@@ -66,7 +66,9 @@ module Lita
           reply = args[:host]
         end
 
-        reply = @site["/v1/actions/reschedule-check"].post *payload_w_params ? "Check scheduled for #{reply}" : "Failed to schedule check for #{reply}"
+        reply = @site["/v1/actions/reschedule-check"].post payload_w_params.to_json { |response, request, result, &block|
+          response.return!(result)
+        }
         response.reply(reply)
       end
 
@@ -108,24 +110,26 @@ module Lita
           reply = args[:host]
         end
 
-        reply = @site["/v1/actions/acknowledge-problem"].post *payload_w_params ? "Acknowledgment set for #{reply}" : "Failed to acknowledge #{reply}"
+        reply = @site["/v1/actions/acknowledge-problem"].post payload_w_params.to_json { |response, request, result, &block|
+          response.return!(result)
+        }
         response.reply(reply)
       end
 
-      route /^icinga(\s+(?<type>fixed|flexible))?\s+downtime/, :schedule_downtime,
-        command: true,
-        kwargs: {
-          host: { short: "h" },
-          service: { short: "s" },
-          duration: { short: "d" }
-        },
-        help: {
-          "icinga (fixed|flexible) downtime <-d | --duration DURATION > <-h | --host HOST> [-s | --service SERVICE]" => "Schedule downtime for a host/service with duration units in (m, h, d, default to seconds)"
-        }
-
-      #def schedule_downtime(response)
-      #  args = response.extensions[:kwargs]
-      #  return response.reply("Missing 'host' argument") unless args[:host]
+#      route /^icinga(\s+(?<type>fixed|flexible))?\s+downtime/, :schedule_downtime,
+#        command: true,
+#        kwargs: {
+#          host: { short: "h" },
+#          service: { short: "s" },
+#          duration: { short: "d" }
+#        },
+#        help: {
+#          "icinga (fixed|flexible) downtime <-d | --duration DURATION > <-h | --host HOST> [-s | --service SERVICE]" => "Schedule downtime for a host/service with duration units in (m, h, d, default to seconds)"
+#        }
+#
+#      def schedule_downtime(response)
+#        args = response.extensions[:kwargs]
+#        return response.reply("Missing 'host' argument") unless args[:host]
 #
 #        units = { "m" => :minutes, "h" => :hours, "d" => :days }
 #        match = /^(?<value>\d+)(?<unit>[#{units.keys.join}])?$/.match(args[:duration])
