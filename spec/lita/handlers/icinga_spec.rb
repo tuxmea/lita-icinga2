@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe Lita::Handlers::Icinga2, lita_handler: true do
-  it { is_expected.to route_http(:post, "/v1/events").to(:receive) }
+  it { is_expected.to route_http(:post, "/nagios/notification").to(:receive) }
   #it { is_expected.to route_command("icinga enable notif -h par-db4").with_authorization_for(:admins).to(:toggle_notifications) }
   #it { is_expected.to route_command("icinga enable notif -h par-db4 -s Load").with_authorization_for(:admins).to(:toggle_notifications) }
   #it { is_expected.to route_command("icinga disable notification -h par-db4 -s Load").with_authorization_for(:admins).to(:toggle_notifications) }
