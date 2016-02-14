@@ -14,7 +14,7 @@ module Lita
           "Content" => "application/json",
           "X-HTTP-Method-Override" => "GET"
         }
-        if robot.config.handlers.icinga.verify_ssl == true
+        if robot.config.handlers.icinga2.verify_ssl == true
           ssl_ca_file = "pki/icinga2-ca.crt"
           verify_ssl = ''
         else
@@ -22,10 +22,10 @@ module Lita
           verify_ssl = OpenSSL::SSL::VERIFY_NONE
         end 
         @site = RestClient::Resource.new(
-          URI.encode(robot.config.handlers.icinga.api),
+          URI.encode(robot.config.handlers.icinga2.api),
           :headers => headers,
-          :user => robot.config.handlers.icinga.user,
-          :password => robot.config.handlers.icinga.pass,
+          :user => robot.config.handlers.icinga2.user,
+          :password => robot.config.handlers.icinga2.pass,
           :ssl_ca_file => ssl_ca_file,
           :verify_ssl => verify_ssl
         )
