@@ -69,7 +69,11 @@ module Lita
         reply = @site["/v1/actions/reschedule-check"].post payload_w_params.to_json { |response, request, result, &block|
           response.return!(result)
         }
-        response.reply(reply)
+        format_reply = ''
+        JSON.parse(reply)["results"].each do |stat|
+          format_reply += stat["status"] + "\n"
+        end
+        response.reply(format_reply)
       end
 
       route /^icinga\s+ack(nowledge)?/, :acknowledge,
@@ -113,7 +117,11 @@ module Lita
         reply = @site["/v1/actions/acknowledge-problem"].post payload_w_params.to_json { |response, request, result, &block|
           response.return!(result)
         }
-        response.reply(reply)
+        format_reply = ''
+        JSON.parse(reply)["results"].each do |stat|
+          format_reply += stat["status"] + "\n"
+        end
+        response.reply(format_reply)
       end
 
       route /^icinga\s+unack(nowledge)?/, :unacknowledge,
@@ -137,10 +145,14 @@ module Lita
         }
         reply = "#{args[:service]} on #{args[:host]}"
 
-        reply = @site["/v1/actions/acknowledge-problem"].post payload_w_params.to_json { |response, request, result, &block|
+        reply = @site["/v1/actions/remove-acknowledgement"].post payload_w_params.to_json { |response, request, result, &block|
           response.return!(result)
         }
-        response.reply(reply)
+        format_reply = ''
+        JSON.parse(reply)["results"].each do |stat|
+          format_reply += stat["status"] + "\n"
+        end
+        response.reply(format_reply)
       end
 
 #      route /^icinga(\s+(?<type>fixed|flexible))?\s+downtime/, :schedule_downtime,

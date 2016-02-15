@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name          = "lita-icinga2"
-  spec.version       = "0.0.3"
+  spec.version       = "0.0.4"
   spec.authors       = ["Martin Alfke"]
   spec.email         = ["tuxmea@gmail.com"]
   spec.description   = "Icinga 2 interaction with Lita"
