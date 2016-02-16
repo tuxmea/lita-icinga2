@@ -200,7 +200,7 @@ module Lita
       # HTTP endpoints
       ##
 
-      http.post "/nagios/notification", :receive
+      http.post "/icinga2/notification", :receive
 
       def receive(request, response)
         params = request.params
