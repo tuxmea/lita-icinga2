@@ -218,15 +218,20 @@ module Lita
         when "ACKNOWLEDGEMENT"
           message = "[ACK] "
         when "PROBLEM", "RECOVERY"
-          message = ""
+          message = "[PROBLEM] "
         else
+          # ToDo:
           # Don't process FLAPPING* and DOWNTIME* events for now
-          return
+          message = "[UNKNOWN] #{params}"
         end
 
         case params["type"]
         when "StateChange"
           message += "#{params["host"]} - #{params["service"]} - #{params["output"]}"
+        when "host"
+          message += "on #{params["host"]} - #{params["state"]} - #{params["output"]}"
+        when "service"
+          message += "on #{params["host"]} at #{params["service"]} - #{params["state"]} - #{params["output"]}"
         else
           message += "Unknown type of event"
           #raise "Notification type must be defined in Icinga command ('host' or 'service')"
