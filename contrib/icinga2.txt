@@ -1,0 +1,103 @@
+# /etc/icinga2/conf.d/notifications.conf
+apply Notification "lita-host" to Host {
+  import "lita-host-notification"
+  user_groups = host.vars.notification.mail.groups
+  users = host.vars.notification.mail.users
+  assign where host.vars.chatops.lita
+}
+
+apply Notification "lita-service" to Service {
+  import "lita-service-notification"
+  user_groups = host.vars.notification.mail.groups
+  users = host.vars.notification.mail.users
+  assign where host.vars.chatops.lita
+}
+
+# /etc/icinga2/conf.d/templates.conf
+template Notification "lita-host-notification" {
+  command = "lita-host-notification"
+
+  states = [ Up, Down ]
+  types = [ Problem, Acknowledgement, Recovery, Custom,
+            FlappingStart, FlappingEnd,
+            DowntimeStart, DowntimeEnd, DowntimeRemoved ]
+
+  period = "24x7"
+}
+
+template Notification "lita-service-notification" {
+  command = "lita-service-notification"
+
+  states = [ OK, Warning, Critical, Unknown ]
+  types = [ Problem, Acknowledgement, Recovery, Custom,
+            FlappingStart, FlappingEnd,
+            DowntimeStart, DowntimeEnd, DowntimeRemoved ]
+
+  period = "24x7"
+}
+
+# /etc/icinga2/conf.d/commands.conf
+object NotificationCommand "lita-host-notification" {
+  import "plugin-notification-command"
+
+  command = [ SysconfDir + "/icinga2/scripts/lita.sh" ]
+
+  env = {
+    NOTIFICATIONTYPE = "$notification.type$"
+    HOSTALIAS = "$host.display_name$"
+    HOSTADDRESS = "$address$"
+    HOSTSTATE = "$host.state$"
+    LONGDATETIME = "$icinga.long_date_time$"
+    HOSTOUTPUT = "$host.output$"
+    NOTIFICATIONAUTHORNAME = "$notification.author$"
+    NOTIFICATIONCOMMENT = "$notification.comment$"
+    HOSTDISPLAYNAME = "$host.display_name$"
+    USEREMAIL = "$user.email$"
+  }
+}
+
+object NotificationCommand "lita-service-notification" {
+  import "plugin-notification-command"
+
+  command = [ SysconfDir + "/icinga2/scripts/lita-service.sh" ]
+
+  env = {
+    NOTIFICATIONTYPE = "$notification.type$"
+    SERVICEDESC = "$service.name$"
+    HOSTALIAS = "$host.display_name$"
+    HOSTADDRESS = "$address$"
+    SERVICESTATE = "$service.state$"
+    LONGDATETIME = "$icinga.long_date_time$"
+    SERVICEOUTPUT = "$service.output$"
+    NOTIFICATIONAUTHORNAME = "$notification.author$"
+    NOTIFICATIONCOMMENT = "$notification.comment$"
+    HOSTDISPLAYNAME = "$host.display_name$"
+    SERVICEDISPLAYNAME = "$service.display_name$"
+    USEREMAIL = "$user.email$"
+  }
+}
+
+# hosts entries:
+# add the following line
+  vars.chatops["lita"] = true
+
+# /etc/icinga2/scripts/lita.sh
+#!/bin/sh
+/usr/bin/curl --request POST --connect-timeout 1 --max-time 2 \
+                             --data-urlencode "type=host" \
+                             --data-urlencode "host=$HOSTALIAS" \
+                             --data-urlencode "output=$HOSTOUTPUT" \
+                             --data-urlencode "state=$HOSTSTATE" \
+                             --data-urlencode "notificationtype=$NOTIFICATIONTYPE" \
+                        http://<litahost>:8080/icinga2/notification
+
+# /etc/icinga2/scripts/lita-service.sh
+#!/bin/sh
+/usr/bin/curl --request POST --connect-timeout 1 --max-time 2 \
+                             --data-urlencode "type=service" \
+                             --data-urlencode "host=$HOSTALIAS" \
+                             --data-urlencode "service=$SERVICEDESC" \
+                             --data-urlencode "output=$SERVICEOUTPUT" \
+                             --data-urlencode "state=$SERVICESTATE" \
+                             --data-urlencode "notificationtype=$NOTIFICATIONTYPE" \
+                        http://<litahost>:8080/icinga2/notification
