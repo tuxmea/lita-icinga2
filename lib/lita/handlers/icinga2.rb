@@ -47,7 +47,7 @@ module Lita
 
       def list_checks(response)
         args = response.extensions[:kwargs]
-        siteurl = "/v1/objects/services?attrs=host_name&attrs=name"
+        siteurl = "/v1/objects/services?attrs=host_name&attrs=name&attrs=last_check_result"
         if args[:host]
           siteurl += "&filter=match(%22#{args[:host]}%22,host.name)"
         end
@@ -56,7 +56,16 @@ module Lita
         }
        format_reply = ''
        JSON.parse(reply)["results"].each do |stat|
-         format_reply += stat["name"] + "\n"
+         last_check_result = stat["attrs"]["last_check_result"]
+         case last_check_result["exit_status"]
+         when 0.0
+           format_reply += "[OK] "
+         else
+           format_reply += "[ERR] "
+         end
+         format_reply += stat["name"]
+         format_reply += " - "
+         format_reply += last_check_result["output"] + "\n"
        end
        response.reply(format_reply)
       end
