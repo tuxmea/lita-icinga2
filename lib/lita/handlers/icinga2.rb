@@ -36,6 +36,31 @@ module Lita
       # Chat routes
       ##
 
+      route /^icinga\slist/, :list_checks,
+        command: true,
+        kwargs: {
+          host: {short: "h"}
+        },
+        help: {
+          "icinga list <-h | --host HOST>" => "List checks (optional for host)"
+        }
+
+      def list_checks(response)
+        args = response.extensions[:kwargs]
+        siteurl = "/v1/objects/services?attrs=host_name&attrs=name"
+        if args[:host]
+          siteurl += "&filter=match(%22#{args[:host]}%22,host.name)"
+        end
+        reply = @site[siteurl].get { |response, request, result, &block|
+          response.return!(result)
+        }
+       format_reply = ''
+       JSON.parse(reply)["results"].each do |stat|
+         format_reply += stat["name"] + "\n"
+       end
+       response.reply(format_reply)
+      end
+
       route /^icinga\s+recheck/, :recheck,
         command: true,
         kwargs: {
