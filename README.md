@@ -63,7 +63,8 @@ see [contrib/icinga2.txt](contrib/icinga2.txt) for information how to enable and
 ```
 lita: icinga recheck <-h | --host HOST> [-s | --service SERVICE] - Reschedule check for given host/service
 lita: icinga ack(nowledge) <-h | --host HOST> [-s | --service SERVICE] [-m | --message MESSAGE] - Acknowledge host/service problem with optional message
-lita: icinga list [-h | --host HOST]
+lita: icinga unack(nowledge) <-h | --host HOST> <-s | --service SERVICE> - Remove acknowledge on host/service problem
+lita: icinga list [-h | --host HOST] - List all checks (optional on specific host)
 ```
 
 ### ToDo
