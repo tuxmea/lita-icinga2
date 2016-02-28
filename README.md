@@ -45,23 +45,25 @@ end
 lita-icinga provides a HTTP endpoint to receive Icinga notifications:
 
 ```
-POST /v1/events
+POST /icinga2/notification
 ```
 Request parameters must include those fields:
 * `type` - `host` or `service`
 * `room` - notifications destination (see `default_room` in configuration section)
-* `host` - Icinga' $HOSTNAME$ or $HOSTALIAS$
-* `output` - Icinga' $HOSTOUTPUT$ or $SERVICEOUTPUT$
-* `state` - Icinga' $HOSTSTATE$ or $SERVICESTATE$
-* `notificationtype` - Icinga' $NOTIFICATIONTYPE$
-* `description` - Icinga' $SERVICEDESC$ (only for `service` type)
+* `host` - Icinga' $HOSTNAME or $HOSTALIAS
+* `output` - Icinga' $HOSTOUTPUT or $SERVICEOUTPUT
+* `state` - Icinga' $HOSTSTATE or $SERVICESTATE
+* `notificationtype` - Icinga' $NOTIFICATIONTYPE
+* `description` - Icinga' $SERVICEDESC (only for `service` type)
 
+see [contrib/icinga2.txt](contrib/icinga2.txt) for information how to enable and configure notification in icinga2
 
-### Send commands to Icinga
+### Available commands
 
 ```
 lita: icinga recheck <-h | --host HOST> [-s | --service SERVICE] - Reschedule check for given host/service
 lita: icinga ack(nowledge) <-h | --host HOST> [-s | --service SERVICE] [-m | --message MESSAGE] - Acknowledge host/service problem with optional message
+lita: icinga list [-h | --host HOST]
 ```
 
 ### ToDo
