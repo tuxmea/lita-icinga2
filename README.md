@@ -61,16 +61,16 @@ see [contrib/icinga2.txt](contrib/icinga2.txt) for information how to enable and
 ### Available commands
 
 ```
-lita: icinga recheck <-h | --host HOST> [-s | --service SERVICE] - Reschedule check for given host/service
-lita: icinga ack(nowledge) <-h | --host HOST> [-s | --service SERVICE] [-m | --message MESSAGE] - Acknowledge host/service problem with optional message
-lita: icinga unack(nowledge) <-h | --host HOST> <-s | --service SERVICE> - Remove acknowledge on host/service problem
-lita: icinga list [-h | --host HOST] - List all checks (optional on specific host)
+lita: icinga2 recheck <-h | --host HOST> [-s | --service SERVICE] - Reschedule check for given host/service
+lita: icinga2 ack(nowledge) <-h | --host HOST> [-s | --service SERVICE] [-m | --message MESSAGE] - Acknowledge host/service problem with optional message
+lita: icinga2 unack(nowledge) <-h | --host HOST> <-s | --service SERVICE> - Remove acknowledge on host/service problem
+lita: icinga2 list [-h | --host HOST] - List all checks (optional on specific host)
 ```
 
 ### ToDo
 
 ```
-lita: icinga enable notif(ication(s)) <-h | --host HOST> [-s | --service SERVICE] - Enable notifications for given host/service
-lita: icinga disable notif(ication(s)) <-h | --host HOST> [-s | --service SERVICE] - Disable notifications for given host/service
-lita: icinga (fixed|flexible) downtime <-d | --duration DURATION > <-h | --host HOST> [-s | --service SERVICE] - Schedule downtime for a host/service with duration units in (m, h, d, default to seconds)
+lita: icinga2 enable notif(ication(s)) <-h | --host HOST> [-s | --service SERVICE] - Enable notifications for given host/service
+lita: icinga2 disable notif(ication(s)) <-h | --host HOST> [-s | --service SERVICE] - Disable notifications for given host/service
+lita: icinga2 (fixed|flexible) downtime <-d | --duration DURATION > <-h | --host HOST> [-s | --service SERVICE] - Schedule downtime for a host/service with duration units in (m, h, d, default to seconds)
 ```

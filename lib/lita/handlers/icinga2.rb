@@ -36,13 +36,13 @@ module Lita
       # Chat routes
       ##
 
-      route /^icinga\slist/, :list_checks,
+      route /^icinga2\slist/, :list_checks,
         command: true,
         kwargs: {
           host: {short: "h"}
         },
         help: {
-          "icinga list <-h | --host HOST>" => "List checks (optional for host)"
+          "icinga2 list <-h | --host HOST>" => "List checks (optional for host)"
         }
 
       def list_checks(response)
@@ -70,14 +70,14 @@ module Lita
        response.reply(format_reply)
       end
 
-      route /^icinga\s+recheck/, :recheck,
+      route /^icinga2\s+recheck/, :recheck,
         command: true,
         kwargs: {
           host: { short: "h" },
           service: { short: "s" }
         },
         help: {
-          "icinga recheck <-h | --host HOST> [-s | --service SERVICE]" => "Reschedule check for given host/service"
+          "icinga2 recheck <-h | --host HOST> [-s | --service SERVICE]" => "Reschedule check for given host/service"
         }
 
       def recheck(response)
@@ -110,7 +110,7 @@ module Lita
         response.reply(format_reply)
       end
 
-      route /^icinga\s+ack(nowledge)?/, :acknowledge,
+      route /^icinga2\s+ack(nowledge)?/, :acknowledge,
         command: true,
         kwargs: {
           host: { short: "h" },
@@ -118,7 +118,7 @@ module Lita
           message: { short: "m" }
         },
         help: {
-          "icinga ack(nowledge) <-h | --host HOST> [-s | --service SERVICE] [-m | --message MESSAGE]" => "Acknowledge host/service problem with optional message",
+          "icinga2 ack(nowledge) <-h | --host HOST> [-s | --service SERVICE] [-m | --message MESSAGE]" => "Acknowledge host/service problem with optional message",
         }
 
       def acknowledge(response)
@@ -158,14 +158,14 @@ module Lita
         response.reply(format_reply)
       end
 
-      route /^icinga\s+unack(nowledge)?/, :unacknowledge,
+      route /^icinga2\s+unack(nowledge)?/, :unacknowledge,
         command: true,
         kwargs: {
           host: { short: "h" },
           service: { short: "s" }
         },
         help: {
-          "icinga unack(nowledge) <-h | --host HOST> <-s | --service SERVICE>" => "Remove Acknowledge host/service problem",
+          "icinga2 unack(nowledge) <-h | --host HOST> <-s | --service SERVICE>" => "Remove Acknowledge host/service problem",
         }
 
       def unacknowledge(response)
@@ -189,7 +189,7 @@ module Lita
         response.reply(format_reply)
       end
 
-#      route /^icinga(\s+(?<type>fixed|flexible))?\s+downtime/, :schedule_downtime,
+#      route /^icinga2(\s+(?<type>fixed|flexible))?\s+downtime/, :schedule_downtime,
 #        command: true,
 #        kwargs: {
 #          host: { short: "h" },
@@ -197,7 +197,7 @@ module Lita
 #          duration: { short: "d" }
 #        },
 #        help: {
-#          "icinga (fixed|flexible) downtime <-d | --duration DURATION > <-h | --host HOST> [-s | --service SERVICE]" => "Schedule downtime for a host/service with duration units in (m, h, d, default to seconds)"
+#          "icinga2 (fixed|flexible) downtime <-d | --duration DURATION > <-h | --host HOST> [-s | --service SERVICE]" => "Schedule downtime for a host/service with duration units in (m, h, d, default to seconds)"
 #        }
 #
 #      def schedule_downtime(response)
